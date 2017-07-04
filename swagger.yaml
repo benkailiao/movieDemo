@@ -1,0 +1,273 @@
+swagger: '2.0'
+info:
+  description: >-
+    Web Api for Movie and it's associated actors and genre.
+  version: 1.0.0
+  title: Movie Api
+  contact:
+    email: benkailiao@gmail.com
+  license:
+    name: Apache 2.0
+    url: 'http://www.apache.org/licenses/LICENSE-2.0.html'
+host: rextest.app
+basePath: /api
+tags:
+  - name: movie
+    description: Everything about the Movie
+  - name: actor
+    description: Registered actors from the movie
+  - name: genre
+    description: Genre defined for the movie
+  - name: file
+    description: file upload
+schemes:
+  - http
+paths:
+  /movie:
+    post:
+      tags:
+        - movie
+      summary: Add a new movie
+      description: 'add a new movie'
+      operationId: addMovie
+      consumes:
+        - multipart/form-data
+      produces:
+        - application/json
+      parameters:
+        - in: formData
+          name: name
+          type: string
+          required: true
+          description: Name of the movie
+        - in: formData
+          name: rate
+          type: integer
+          required: false
+          description: rating value
+        - in: formData
+          name: description
+          type: string
+          required: false
+          description: movie description
+        - in: formData
+          name: genre
+          type: string
+          required: false
+          description: movie genre name
+        - in: formData
+          name: actors
+          type: array
+          items:
+            type: string
+          required: false
+          description: list of actor
+      responses:
+        '200':
+          description: successful operation
+          schema:
+            $ref: '#/definitions/MovieResponse'
+        '405':
+          description: Invalid input
+      security:
+        - APIKeyQueryParam: []
+  '/movie/{movieId}':
+    get:
+      tags:
+        - movie
+      summary: Retrive Movie information by movieId
+      description: >-
+        For valid response try integer IDs with value >= 1 
+      produces:
+        - application/json
+      parameters:
+        - name: movieId
+          in: path
+          description: ID of Movie that needs to be fetched
+          required: true
+          type: integer
+          minimum: 1
+          format: int64
+      responses:
+        '200':
+          description: successful operation
+          schema:
+            $ref: '#/definitions/MovieResponse'
+      security:
+        - APIKeyQueryParam: []
+  /actor:
+    post:
+      tags:
+        - actor
+      summary: Add a new actor
+      description: 'add a new actor'
+      consumes:
+        - multipart/form-data
+      produces:
+        - application/json
+      parameters:
+        - in: formData
+          name: name
+          type: string
+          required: true
+          description: Name of the Actor
+        - in: formData
+          name: birthday
+          type: string
+          required: false
+          description: day of birth
+        - in: formData
+          name: bio
+          type: string
+          required: false
+          description: actor bio
+      responses:
+        '200':
+          description: successful operation
+          schema:
+            $ref: '#/definitions/MovieResponse'
+        '405':
+          description: Invalid input
+      security:
+        - APIKeyQueryParam: []
+  '/actor/{actorId}':
+    get:
+      tags:
+        - actor
+      summary: Retrive actor information by actorId
+      description: >-
+        For valid response try integer IDs with value >= 1 
+      produces:
+        - application/json
+      parameters:
+        - name: actorId
+          in: path
+          description: ID of actor that needs to be fetched
+          required: true
+          type: integer
+          minimum: 1
+          format: int64
+      responses:
+        '200':
+          description: successful operation
+          schema:
+            $ref: '#/definitions/ActorResponse'
+      security:
+        - APIKeyQueryParam: []
+  '/genre/{genreId}':
+    get:
+      tags:
+        - genre
+      summary: Retrive genre information by genreId
+      description: >-
+        For valid response try integer IDs with value >= 1 
+      produces:
+        - application/json
+      parameters:
+        - name: genreId
+          in: path
+          description: ID of genre that needs to be fetched
+          required: true
+          type: integer
+          minimum: 1
+          format: int64
+      responses:
+        '200':
+          description: successful operation
+          schema:
+            $ref: '#/definitions/GenreResponse'
+      security:
+        - APIKeyQueryParam: []
+  /file:
+    post:
+      tags:
+        - file
+      summary: Add a new movie
+      description: 'upload file of type "movie" or "actor"'
+      consumes:
+        - multipart/form-data
+      produces:
+        - application/json
+      parameters:
+        - in: formData
+          name: file
+          type: file
+          required: true
+          description: The file to upload.
+        - in: formData
+          name: type
+          type: string
+          required: false
+          description: Description of file contents.
+        - in: formData
+          name: type_id
+          type: string
+          required: false
+          description: Description of file contents.
+      responses:
+        '200':
+          description: successful operation
+        '405':
+          description: Invalid input
+      security:
+        - APIKeyQueryParam: []
+securityDefinitions:
+  APIKeyQueryParam:
+     type: apiKey
+     in: query
+     name: api_token
+definitions:
+  MovieResponse:
+    type: object
+    properties:
+      Name:
+        type: string
+        example: Iron man
+      Rating:
+        type: integer
+        example: 3
+      Actors:
+        type: array
+        example: [sam,john,allen]
+      Genre:
+        type: string
+        example: test genre
+      Description:
+        type: string
+        example: sample text
+      images:
+        type: string
+        example: files/IeWgMjreCtNFan0RxQnN0BjOFxZCowlnMNGUHlzv.jpeg
+  ActorResponse:
+    type: object
+    properties:
+      Name:
+        type: string
+        example: John Doe
+      Birth Day:
+        type: string
+        example: '1978-12-12'
+      Age:
+        type: string
+        example: '33'
+      Bio:
+        type: string
+        example: sample Bio
+      images:
+        type: string
+        example: files/IeWgMjreCtNFan0RxQnN0BjOFxZCowlnMNGUHlzv.jpeg
+  GenreResponse:
+    type: object
+    properties:
+      Name:
+        type: string
+        example: comedy
+      Movies:
+        type: array
+        example: ['The Hangover','SuperBad']
+      Actors:
+        type: array
+        example: ['Bradley Cooper','Ed Helms','Zach Galifianakis','Heather Graham']
+      images:
+        type: string
+        example: files/IeWgMjreCtNFan0RxQnN0BjOFxZCowlnMNGUHlzv.jpeg
