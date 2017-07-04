@@ -11,6 +11,15 @@ class MovieTableSeeder extends Seeder
      */
     public function run()
     {
+		DB::table('users')->insert([
+	        'name' => 'ben',
+	        'email' => 'ben@gmail.com',
+	        'password' => '$2y$10$fnByF6ipOxM2KPbV.D2gM.QVYKvY2TRWfyi3X0E58Eav1AJOuVPhq',
+	        'api_token' => 'ZZCEVXzuipUdV4QVVWp42w5hJZNcJCipuN3dxxe5YVY1igiL2OLdK5cijfD8',
+	        'remember_token' => null,
+	        'created_at' => date("Y-m-d H:i:s"),
+	        'updated_at' => date("Y-m-d H:i:s"),
+	    ]);
     	for ($i = 0 ; $i < 50; $i++){
     		DB::table('movies')->insert([
 	            'name' => str_random(10),
