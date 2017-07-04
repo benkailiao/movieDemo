@@ -16,3 +16,5 @@ This is a laravel api demo developed using Homestead and vagrant. The box is not
 - Using Swagger
 
 - Swagger.yaml is under the root
+
+- demo api_token is ZZCEVXzuipUdV4QVVWp42w5hJZNcJCipuN3dxxe5YVY1igiL2OLdK5cijfD8
